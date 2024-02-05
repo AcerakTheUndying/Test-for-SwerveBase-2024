@@ -14,28 +14,34 @@
 using namespace DriveConstants;
 
 DriveSubsystem::DriveSubsystem()
-    : m_frontLeft{kFrontLeftDriveMotorPort,
-                  kFrontLeftTurningMotorPort,
-                  kFrontLeftDriveEncoderPorts,
-                  kFrontLeftTurningEncoderPorts,
-                  kFrontLeftDriveEncoderReversed,
-                  kFrontLeftTurningEncoderReversed},
+    : m_frontLeft{kFrontLeftDriveMotorID,
+                  kFrontLeftTurningMotorID,
+                  kFrontLeftAbsoluteTurningEncoderID,
+                  kFrontleftAngleOffset,
+                  45.0,
+                  "Front Left"},
 
-      m_rearLeft{
-          kRearLeftDriveMotorPort,       kRearLeftTurningMotorPort,
-          kRearLeftDriveEncoderPorts,    kRearLeftTurningEncoderPorts,
-          kRearLeftDriveEncoderReversed, kRearLeftTurningEncoderReversed},
+      m_rearLeft{kRearLeftDriveMotorID,
+                 kRearLeftTurningMotorID,
+                 kRearLeftAbsoluteTurningEncoderID,
+                 kRearleftAngleOffset,
+                 -45.0,
+                 "Rear Left "},
 
-      m_frontRight{
-          kFrontRightDriveMotorPort,       kFrontRightTurningMotorPort,
-          kFrontRightDriveEncoderPorts,    kFrontRightTurningEncoderPorts,
-          kFrontRightDriveEncoderReversed, kFrontRightTurningEncoderReversed},
+      m_frontRight{kFrontRightDriveMotorID,
+                   kFrontRightTurningMotorID,
+                   kFrontRightAbsoluteTurningEncoderID,
+                   kFrontRightAngleOffset,
+                   -45.0,
+                   "Front Right "},
 
-      m_rearRight{
-          kRearRightDriveMotorPort,       kRearRightTurningMotorPort,
-          kRearRightDriveEncoderPorts,    kRearRightTurningEncoderPorts,
-          kRearRightDriveEncoderReversed, kRearRightTurningEncoderReversed},
-
+      m_rearRight{kRearRightDriveMotorID,
+                  kRearRightTurningMotorID,
+                  kRearRightAbsoluteTurningEncoderID,
+                  kRearRightAngleOffset,
+                  45.0,
+                  "Rear Right "},
+                  
       m_odometry{kDriveKinematics,
                  m_gyro.GetRotation2d(),
                  {m_frontLeft.GetPosition(), m_frontRight.GetPosition(),

@@ -34,35 +34,27 @@ constexpr int kTimeoutMs = 10;
 constexpr int kPIDLoopIdx = 0;
 
 namespace DriveConstants {
-inline constexpr int kFrontLeftDriveMotorPort = 0;
-inline constexpr int kRearLeftDriveMotorPort = 2;
-inline constexpr int kFrontRightDriveMotorPort = 4;
-inline constexpr int kRearRightDriveMotorPort = 6;
+    constexpr int kPigeonID = 5;
 
-inline constexpr int kFrontLeftTurningMotorPort = 1;
-inline constexpr int kRearLeftTurningMotorPort = 3;
-inline constexpr int kFrontRightTurningMotorPort = 5;
-inline constexpr int kRearRightTurningMotorPort = 7;
+  //Drive Motor ID's
+    constexpr int kFrontLeftDriveMotorID = 22;
+    constexpr int kRearLeftDriveMotorID = 42;
+    constexpr int kFrontRightDriveMotorID = 12;
+    constexpr int kRearRightDriveMotorID = 32;
 
-inline constexpr int kFrontLeftTurningEncoderPorts[2]{0, 1};
-inline constexpr int kRearLeftTurningEncoderPorts[2]{2, 3};
-inline constexpr int kFrontRightTurningEncoderPorts[2]{4, 5};
-inline constexpr int kRearRightTurningEncoderPorts[2]{6, 7};
+  //Turning Motor ID's
+    constexpr int kFrontLeftTurningMotorID = 21;
+    constexpr int kRearLeftTurningMotorID = 41;
+    constexpr int kFrontRightTurningMotorID = 11;
+    constexpr int kRearRightTurningMotorID = 31;
 
-inline constexpr bool kFrontLeftTurningEncoderReversed = false;
-inline constexpr bool kRearLeftTurningEncoderReversed = true;
-inline constexpr bool kFrontRightTurningEncoderReversed = false;
-inline constexpr bool kRearRightTurningEncoderReversed = true;
-
-inline constexpr int kFrontLeftDriveEncoderPorts[2]{8, 9};
-inline constexpr int kRearLeftDriveEncoderPorts[2]{10, 11};
-inline constexpr int kFrontRightDriveEncoderPorts[2]{12, 13};
-inline constexpr int kRearRightDriveEncoderPorts[2]{14, 15};
-
-inline constexpr bool kFrontLeftDriveEncoderReversed = false;
-inline constexpr bool kRearLeftDriveEncoderReversed = true;
-inline constexpr bool kFrontRightDriveEncoderReversed = false;
-inline constexpr bool kRearRightDriveEncoderReversed = true;
+  //CANCoder ID's 
+    constexpr int kFrontLeftAbsoluteTurningEncoderID = 20;
+    constexpr int kRearLeftAbsoluteTurningEncoderID = 40;
+    constexpr int kFrontRightAbsoluteTurningEncoderID = 10;
+    constexpr int kRearRightAbsoluteTurningEncoderID = 30;
+    constexpr double kTurning_kP = 0.22;
+    constexpr double kDrive_kP = 0.1;
 
 // If you call DriveSubsystem::Drive with a different period make sure to update
 // this.
@@ -81,6 +73,12 @@ inline constexpr double kPFrontLeftVel = 0.5;
 inline constexpr double kPRearLeftVel = 0.5;
 inline constexpr double kPFrontRightVel = 0.5;
 inline constexpr double kPRearRightVel = 0.5;
+
+      constexpr double kFrontleftAngleOffset = -124.717; //104.854;    //-178.505859;    //-295.4, Generic offset is -43.505859
+      constexpr double kFrontRightAngleOffset = -81.65;    //-131.2, Generic offset is 58.535
+      constexpr double kRearleftAngleOffset = 145.986;    //-62.2, Generic offset is 10.986
+      constexpr double kRearRightAngleOffset = -34.98047;    //-224.4, Generic offset 145.01953
+      constexpr double kSteeringRatio = (60.0 / 10.0) * (50.0 / 14.0);
 
 constexpr double kDrive_kP = 0.1;
 
