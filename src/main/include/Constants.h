@@ -34,7 +34,7 @@ constexpr int kTimeoutMs = 10;
 constexpr int kPIDLoopIdx = 0;
 
 namespace DriveConstants {
-    constexpr int kPigeonID = 5;
+constexpr int kPigeonID = 5;
 
   //Drive Motor ID's
     constexpr int kFrontLeftDriveMotorID = 22;
@@ -74,11 +74,11 @@ inline constexpr double kPRearLeftVel = 0.5;
 inline constexpr double kPFrontRightVel = 0.5;
 inline constexpr double kPRearRightVel = 0.5;
 
-      constexpr double kFrontleftAngleOffset = -124.717; //104.854;    //-178.505859;    //-295.4, Generic offset is -43.505859
-      constexpr double kFrontRightAngleOffset = -81.65;    //-131.2, Generic offset is 58.535
-      constexpr double kRearleftAngleOffset = 145.986;    //-62.2, Generic offset is 10.986
-      constexpr double kRearRightAngleOffset = -34.98047;    //-224.4, Generic offset 145.01953
-      constexpr double kSteeringRatio = (60.0 / 10.0) * (50.0 / 14.0);
+constexpr double kFrontleftAngleOffset = -124.717; //104.854;    //-178.505859;    //-295.4, Generic offset is -43.505859
+constexpr double kFrontRightAngleOffset = -81.65;    //-131.2, Generic offset is 58.535
+constexpr double kRearleftAngleOffset = 145.986;    //-62.2, Generic offset is 10.986
+constexpr double kRearRightAngleOffset = -34.98047;    //-224.4, Generic offset 145.01953
+constexpr double kSteeringRatio = (60.0 / 10.0) * (50.0 / 14.0);
 
 constexpr double kDrive_kP = 0.1;
 

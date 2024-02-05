@@ -41,7 +41,6 @@ DriveSubsystem::DriveSubsystem()
                   kRearRightAngleOffset,
                   45.0,
                   "Rear Right "},
-                  
       m_odometry{kDriveKinematics,
                  m_gyro.GetRotation2d(),
                  {m_frontLeft.GetPosition(), m_frontRight.GetPosition(),
