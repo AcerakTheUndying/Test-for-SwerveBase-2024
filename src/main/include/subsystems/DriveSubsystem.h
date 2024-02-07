@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include <frc/ADXRS450_Gyro.h>
 #include <frc/Encoder.h>
 #include <frc/drive/MecanumDrive.h>
 #include <frc/geometry/Pose2d.h>
@@ -90,9 +89,9 @@ class DriveSubsystem : public frc2::SubsystemBase {
   void ResetOdometry(frc::Pose2d pose);
 
   units::meter_t kTrackWidth =
-      0.5_m;  // Distance between centers of right and left wheels on robot
+      0.62_m;  // Distance between centers of right and left wheels on robot
   units::meter_t kWheelBase =
-      0.7_m;  // Distance between centers of front and back wheels on robot
+      0.62_m;  // Distance between centers of front and back wheels on robot
 
   frc::SwerveDriveKinematics<4> kDriveKinematics{
       frc::Translation2d{kWheelBase / 2, kTrackWidth / 2},
@@ -111,10 +110,26 @@ class DriveSubsystem : public frc2::SubsystemBase {
   SwerveModule m_frontRight;
   SwerveModule m_rearRight;
 
-  // The gyro sensor
-  frc::ADXRS450_Gyro m_gyro;
+   // The gyro sensor
+  //frc::ADXRS450_Gyro m_gyro;
+   PigeonIMU *m_pigeon = new PigeonIMU{5};  //This is how we did it in 2022.
+  //PigeonIMU m_pigeon{5};                  //Hoping to do it this way in 2023
+  // Odometry class for tracking robot pose
+  // 4 defines the number of modules
+  frc::SwerveDriveOdometry<4> m_odometry;           // original odometry tracked using encoders and velocities 
+
+  /*        This code was in the original code, but I'm 90% sure its for autos, april tags, other stuff we don't need
+  frc::SwerveDrivePoseEstimator<4> m_poseEstimator; // odometry that also includes updates of fixed vision targets (April Tags) 
+  pathplanner::SwerveAutoBuilder6508 *m_autoBuilder;// auto builder used to create a sequence of follow commands
+  frc::AprilTagFieldLayout m_aprilTagFieldLayout;   // April Tag locations and orientations, loaded from json file 
+  bool m_aprilTagFieldLayoutFlag;                   // has the m_aprilTagFieldLayout been loaded from a json file yet 
+  std::vector<pathplanner::PathPlannerTrajectory> m_templatePathPlannerTrajectory; // can hold a generated path not inteneded for autonomous 
+*/
+
 
   // Odometry class for tracking robot pose
   // 4 defines the number of modules
-  frc::SwerveDriveOdometry<4> m_odometry;
+
+      frc::Rotation2d GetPigeonRotation2D();
+
 };

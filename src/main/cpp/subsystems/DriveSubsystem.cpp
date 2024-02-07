@@ -42,14 +42,14 @@ DriveSubsystem::DriveSubsystem()
                   45.0,
                   "Rear Right "},
       m_odometry{kDriveKinematics,
-                 m_gyro.GetRotation2d(),
+                 GetPigeonRotation2D(),
                  {m_frontLeft.GetPosition(), m_frontRight.GetPosition(),
                   m_rearLeft.GetPosition(), m_rearRight.GetPosition()},
                  frc::Pose2d{}} {}
 
 void DriveSubsystem::Periodic() {
   // Implementation of subsystem periodic method goes here.
-  m_odometry.Update(m_gyro.GetRotation2d(),
+  m_odometry.Update(GetPigeonRotation2D(),
                     {m_frontLeft.GetPosition(), m_rearLeft.GetPosition(),
                      m_frontRight.GetPosition(), m_rearRight.GetPosition()});
 }
@@ -61,7 +61,7 @@ void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
   auto states =
       kDriveKinematics.ToSwerveModuleStates(frc::ChassisSpeeds::Discretize(
           fieldRelative ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(
-                              xSpeed, ySpeed, rot, m_gyro.GetRotation2d())
+                              xSpeed, ySpeed, rot, GetPigeonRotation2D())
                         : frc::ChassisSpeeds{xSpeed, ySpeed, rot},
           period));
 
@@ -92,16 +92,19 @@ void DriveSubsystem::ResetEncoders() {
   m_rearRight.ResetEncoders();
 }
 
+
 units::degree_t DriveSubsystem::GetHeading() const {
-  return m_gyro.GetRotation2d().Degrees();
+  return units::degree_t(m_pigeon->GetYaw());
 }
 
 void DriveSubsystem::ZeroHeading() {
-  m_gyro.Reset();
+  m_pigeon->SetYaw(0.0);
 }
 
 double DriveSubsystem::GetTurnRate() {
-  return -m_gyro.GetRate();
+    double xyz_dps[3];
+  m_pigeon->GetRawGyro(xyz_dps);  // returns degrees per second
+  return xyz_dps[2];
 }
 
 frc::Pose2d DriveSubsystem::GetPose() {
@@ -114,4 +117,10 @@ void DriveSubsystem::ResetOdometry(frc::Pose2d pose) {
       {m_frontLeft.GetPosition(), m_frontRight.GetPosition(),
        m_rearLeft.GetPosition(), m_rearRight.GetPosition()},
       pose);
+}
+
+frc::Rotation2d DriveSubsystem::GetPigeonRotation2D() {
+  // The Pigeon doesn't return a Rotation2D object
+  // So we had to make a method that got the degree and returned as a Rotation2D
+  return frc::Rotation2d(GetHeading());
 }
