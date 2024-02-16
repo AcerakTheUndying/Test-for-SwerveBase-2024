@@ -80,6 +80,8 @@ constexpr double kRearleftAngleOffset = 145.986;    //-62.2, Generic offset is 1
 constexpr double kRearRightAngleOffset = -34.98047;    //-224.4, Generic offset 145.01953
 constexpr double kSteeringRatio = (60.0 / 10.0) * (50.0 / 14.0);
 
+constexpr auto kMaxDrivingRotation = units::radians_per_second_t(2.5);
+
 }  // namespace DriveConstants
 
 namespace ModuleConstants {

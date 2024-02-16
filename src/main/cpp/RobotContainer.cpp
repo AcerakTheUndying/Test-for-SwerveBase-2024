@@ -37,14 +37,30 @@ RobotContainer::RobotContainer()
     m_drive.SetDefaultCommand(frc2::RunCommand(
         [this]
         {
-            m_drive.Drive(
-                // Multiply by max speed to map the joystick unitless inputs to
-                // actual units. This will map the [-1, 1] to [max speed backwards,
-                // max speed forwards], converting them to actual units.
-                m_driverController.GetLeftY() * AutoConstants::kMaxSpeed,
-                m_driverController.GetLeftX() * AutoConstants::kMaxSpeed,
-                m_driverController.GetRightX() * AutoConstants::kMaxAngularSpeed,
-                false);
+            m_drive.SetDefaultCommand(DefaultDrive(
+                &m_drive,
+                [this]
+                {
+                    /*frc::SmartDashboard::PutNumber("Joystick X",
+                                                   -m_driverController.GetY());*/
+                    return /*m_xspeedLimiter.Calculate(*/ ApplyDeadband(
+                               -m_stick.GetY(), 0.1) *
+                           ((1 - m_stick.GetThrottle()) / 2) * 5.0 /*)*/;
+                }, // WDR:Need to implement constants for deadband and maxspeed
+                [this]
+                {
+                    return /*m_yspeedLimiter.Calculate(*/ ApplyDeadband(
+                               -m_stick.GetX(), 0.1) *
+                           ((1 - m_stick.GetThrottle()) / 2) * 5.0 /*)*/;
+                }, // WDR:Need to implement constants for deadband and maxspeed
+                [this]
+                {
+                    return /*m_rotLimiter.Calculate(*/ ApplyDeadbandSquaredInputs(
+                               -m_stick.GetZ(), 0.2) *
+                           ((1 - m_stick.GetThrottle()) / 2) *
+                           kMaxDrivingRotation.value() /*)*/;
+                } // WDR:Need to implement constants for deadband and max rotation
+                ));
         },
         {&m_drive}));
 }
@@ -110,52 +126,27 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
             { m_drive.Drive(0_mps, 0_mps, 0_rad_per_s, false); },
             {})
             .ToPtr());
+}
 
-double ApplyDeadband(double joystickValue, double deadband)
-    {
-        double result = 0.0;
-        if (joystickValue < -deadband)
-            result = (joystickValue + deadband) / (1.0 - deadband);
+double RobotContainer::ApplyDeadband(double joystickValue, double deadband)
+{
+    double result = 0.0;
+    if (joystickValue < -deadband)
+        result = (joystickValue + deadband) / (1.0 - deadband);
 
-        if (joystickValue > deadband)
-            result = (joystickValue - deadband) / (1.0 - deadband);
-    }
+    if (joystickValue > deadband)
+        result = (joystickValue - deadband) / (1.0 - deadband);
+}
 
 double RobotContainer::ApplyDeadbandSquaredInputs(double joystickValue,
-                                                      double deadband)
-    {
-        double result = 0.0;
-        if (joystickValue < -deadband)
-            result = (joystickValue + deadband) / (1.0 - deadband) *
-                     fabs(joystickValue + deadband) / (1.0 - deadband);
+                                                  double deadband)
+{
+    double result = 0.0;
+    if (joystickValue < -deadband)
+        result = (joystickValue + deadband) / (1.0 - deadband) *
+                 fabs(joystickValue + deadband) / (1.0 - deadband);
 
-        if (joystickValue > deadband)
-            result = (joystickValue - deadband) / (1.0 - deadband) *
-                     fabs(joystickValue - deadband) / (1.0 - deadband);
-    }
-
-    m_drive.SetDefaultCommand(DefaultDrive(
-        &m_drive,
-        [this]
-        {
-            /*frc::SmartDashboard::PutNumber("Joystick X",
-                                           -m_driverController.GetY());*/
-            return /*m_xspeedLimiter.Calculate(*/ ApplyDeadband(
-                       -m_stick.GetY(), 0.1) *
-                   ((1 - m_stick.GetThrottle()) / 2) * 5.0 /*)*/;
-        }, // WDR:Need to implement constants for deadband and maxspeed
-        [this]
-        {
-            return /*m_yspeedLimiter.Calculate(*/ ApplyDeadband(
-                       -m_stick.GetX(), 0.1) *
-                   ((1 - m_stick.GetThrottle()) / 2) * 5.0 /*)*/;
-        }, // WDR:Need to implement constants for deadband and maxspeed
-        [this]
-        {
-            return /*m_rotLimiter.Calculate(*/ ApplyDeadbandSquaredInputs(
-                       -m_stick.GetZ(), 0.2) *
-                   ((1 - m_stick.GetThrottle()) / 2) *
-                   kMaxDrivingRotation.value() /*)*/;
-        } // WDR:Need to implement constants for deadband and max rotation
-        ));
+    if (joystickValue > deadband)
+        result = (joystickValue - deadband) / (1.0 - deadband) *
+                 fabs(joystickValue - deadband) / (1.0 - deadband);
 }
