@@ -5,6 +5,8 @@
 #pragma once
 
 #include <frc/XboxController.h>
+#include <frc/Joystick.h>
+
 #include <frc/controller/PIDController.h>
 #include <frc/controller/ProfiledPIDController.h>
 #include <frc/smartdashboard/SendableChooser.h>
@@ -18,6 +20,8 @@
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
 
+#include "commands/DefaultDrive.h"
+
 /**
  * This class is where the bulk of the robot should be declared.  Since
  * Command-based is a "declarative" paradigm, very little robot logic should
@@ -29,11 +33,19 @@ class RobotContainer {
  public:
   RobotContainer();
 
+  double ApplyDeadband(double joystickValue, double deadband);
+  double ApplyDeadbandSquaredInputs(double joystickValue, double deadband);
+
+
+
   frc2::CommandPtr GetAutonomousCommand();
 
  private:
   // The driver's controller
   frc::XboxController m_driverController{OIConstants::kDriverControllerPort};
+  frc::Joystick m_stick{OIConstants::kDriverControllerPort};
+  
+  
 
   // The robot's subsystems and commands are defined here...
 
