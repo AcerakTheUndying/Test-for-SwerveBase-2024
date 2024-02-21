@@ -23,7 +23,7 @@ SwerveModule::SwerveModule(int driveMotorCANBusID,
   // Setup the CANCoder on the Swerve Module for absolute steering reading.
   m_absoluteTurnEncoder.ConfigSensorInitializationStrategy(ctre::phoenix::sensors::SensorInitializationStrategy::BootToAbsolutePosition, kTimeoutMs);
   m_absoluteTurnEncoder.ConfigAbsoluteSensorRange(ctre::phoenix::sensors::AbsoluteSensorRange::Signed_PlusMinus180, kTimeoutMs);
-  m_absoluteTurnEncoder.ConfigMagnetOffset(offsetDegrees, kTimeoutMs);
+  //m_absoluteTurnEncoder.ConfigMagnetOffset(offsetDegrees, kTimeoutMs);
   m_absoluteTurnEncoder.SetStatusFramePeriod(ctre::phoenix::sensors::CANCoderStatusFrame_VbatAndFaults, 255, kTimeoutMs);
   m_absoluteTurnEncoder.SetStatusFramePeriod(ctre::phoenix::sensors::CANCoderStatusFrame_SensorData, 255, kTimeoutMs);
 
