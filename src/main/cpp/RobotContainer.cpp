@@ -30,30 +30,49 @@ RobotContainer::RobotContainer() {
   // Configure the button bindings
   ConfigureButtonBindings();
 
-  // Set up default drive command
-  // The left stick controls translation of the robot.
-  // Turning is controlled by the X axis of the right stick.
-  m_drive.SetDefaultCommand(DefaultDrive(
-      &m_drive,
+ // // Set up default drive command
+ // // The left stick controls translation of the robot.
+ // // Turning is controlled by the X axis of the right stick.
+ // m_drive.SetDefaultCommand(DefaultDrive(
+ //     &m_drive,
+ //     [this] {
+ //       /*frc::SmartDashboard::PutNumber("Joystick X",
+ //                                      -m_driverController.GetY());*/
+ //       return /*m_xspeedLimiter.Calculate(*/ ApplyDeadband(-m_stick.GetY(),
+ //                                                           0.1) *
+ //              ((1 - m_stick.GetThrottle()) / 2) * 5.0 /*)*/;
+ //     },  // WDR:Need to implement constants for deadband and maxspeed
+ //     [this] {
+ //       return /*m_yspeedLimiter.Calculate(*/ ApplyDeadband(-m_stick.GetX(),
+ //                                                           0.1) *
+ //              ((1 - m_stick.GetThrottle()) / 2) * 5.0 /*)*/;
+ //     },  // WDR:Need to implement constants for deadband and maxspeed
+ //     [this] {
+ //       return /*m_rotLimiter.Calculate(*/ ApplyDeadbandSquaredInputs(
+ //                  -m_stick.GetZ(), 0.2) *
+ //              ((1 - m_stick.GetThrottle()) / 2) *
+ //              kMaxDrivingRotation.value() /*)*/;
+ //     }  // WDR:Need to implement constants for deadband and max rotation
+
+
+
+ //     ));
+
+ m_drive.SetDefaultCommand(frc2::RunCommand(
       [this] {
-        /*frc::SmartDashboard::PutNumber("Joystick X",
-                                       -m_driverController.GetY());*/
-        return /*m_xspeedLimiter.Calculate(*/ ApplyDeadband(-m_stick.GetY(),
-                                                            0.1) *
-               ((1 - m_stick.GetThrottle()) / 2) * 5.0 /*)*/;
-      },  // WDR:Need to implement constants for deadband and maxspeed
-      [this] {
-        return /*m_yspeedLimiter.Calculate(*/ ApplyDeadband(-m_stick.GetX(),
-                                                            0.1) *
-               ((1 - m_stick.GetThrottle()) / 2) * 5.0 /*)*/;
-      },  // WDR:Need to implement constants for deadband and maxspeed
-      [this] {
-        return /*m_rotLimiter.Calculate(*/ ApplyDeadbandSquaredInputs(
-                   -m_stick.GetZ(), 0.2) *
-               ((1 - m_stick.GetThrottle()) / 2) *
-               kMaxDrivingRotation.value() /*)*/;
-      }  // WDR:Need to implement constants for deadband and max rotation
-      ));
+        m_drive.Drive(
+            // Multiply by max speed to map the joystick unitless inputs to
+            // actual units. This will map the [-1, 1] to [max speed backwards,
+            // max speed forwards], converting them to actual units.
+            //m_driverController.GetLeftY() * AutoConstants::kMaxSpeed,
+            //m_driverController.GetLeftX() * AutoConstants::kMaxSpeed,
+            //m_driverController.GetRightX() * AutoConstants::kMaxAngularSpeed,
+            0.0_mps,
+            0.0_mps,
+            0.0_rad_per_s,
+            false);
+      },
+      {&m_drive}));
 }
 
 void RobotContainer::ConfigureButtonBindings() {}

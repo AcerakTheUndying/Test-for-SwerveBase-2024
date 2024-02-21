@@ -6,8 +6,9 @@
 
 #include <frc/geometry/Rotation2d.h>
 // #include <numbers>
-// #include <frc/smartdashboard/SmartDashboard.h>
+//#include <frc/smartdashboard/SmartDashboard.h>
 #include "Constants.h"
+//#include <stdio.h>
 using namespace DriveConstants;
 
 SwerveModule::SwerveModule(int driveMotorCANBusID,
@@ -36,19 +37,19 @@ SwerveModule::SwerveModule(int driveMotorCANBusID,
   m_turningMotor.SetSelectedSensorPosition(-powerOnAbsoluteSteerAngle / 360.0 * kSteeringRatio * 2048.0);
 #endif
 
-#ifdef SWERVYB
+//#ifdef SWERVYB
   m_turningMotor.SetSelectedSensorPosition(powerOnAbsoluteSteerAngle / 360.0 * kSteeringRatio * 2048.0);
-#endif
+//#endif
 
 #ifdef SPOBOT
   m_turningMotor.SetSelectedSensorPosition(powerOnAbsoluteSteerAngle / 360.0 * kSteeringRatio * 2048.0);
 #endif
 
-  // frc::SmartDashboard::PutNumber(m_name + "/Initial SelectedSensorPosition: ", m_turningMotor.GetSelectedSensorPosition());
+   //frc::SmartDashboard::PutNumber(m_name + "/Initial SelectedSensorPosition: ", m_turningMotor.GetSelectedSensorPosition());
 
   // Initialise the last module heading value to the heading at the time the swerve modules are created (ie Powerup)
   m_prevModuleAngleDegrees = m_absoluteTurnEncoder.GetAbsolutePosition();
-  // std::cout << "Set m_prevModuleAngleDegrees on " << moduleName << " to " << m_prevModuleAngleDegrees << "\n";
+  //std::cout << "Set m_prevModuleAngleDegrees on " << moduleName << " to " << m_prevModuleAngleDegrees << "\n";
 
   // Initialize the encoder windup value
   m_encoderWindUpRevolutions = 0;
@@ -89,7 +90,7 @@ SwerveModule::SwerveModule(int driveMotorCANBusID,
 
   /* set the peak and nominal outputs */
   m_turningMotor.ConfigNominalOutputForward(0, kTimeoutMs);
-  m_turningMotor.ConfigNominalOutputReverse(0, kTimeoutMs);
+  m_turningMotor.ConfigNominalOutputReverse (0, kTimeoutMs);
   //  m_turningMotor.ConfigPeakOutputForward(1.0, kTimeoutMs);
   //  m_turningMotor.ConfigPeakOutputReverse(-1.0, kTimeoutMs);
   m_turningMotor.ConfigPeakOutputForward(0.5, kTimeoutMs);
@@ -98,21 +99,21 @@ SwerveModule::SwerveModule(int driveMotorCANBusID,
   /* set closed loop gains in slot0 */
   m_turningMotor.Config_kF(kPIDLoopIdx, 0.0, kTimeoutMs); // WARNING this did have a kF of 0.1097, was set to 0 as position mode
   //  m_turningMotor.Config_kP(kPIDLoopIdx, kTurning_kP, kTimeoutMs); //0.22
-  m_turningMotor.Config_kP(kPIDLoopIdx, 0.5, kTimeoutMs); // 0.22
+  m_turningMotor.Config_kP(kPIDLoopIdx, 0.1, kTimeoutMs); // 0.22, 0.5
   m_turningMotor.Config_kI(kPIDLoopIdx, 0.0, kTimeoutMs);
   //  m_turningMotor.Config_kD(kPIDLoopIdx, 0.0, kTimeoutMs);
-  m_turningMotor.Config_kD(kPIDLoopIdx, 5.0, kTimeoutMs);
+  m_turningMotor.Config_kD(kPIDLoopIdx, 0.0, kTimeoutMs); //5.0
 
   // Use the internal sensor for position feedback on the PID position loop
   m_turningMotor.ConfigSelectedFeedbackSensor(ctre::phoenix::motorcontrol::FeedbackDevice::IntegratedSensor, 0, 0);
   m_turningMotor.SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Coast);
 
-  #ifdef SWERVYB
+  //#ifdef SWERVYB
     m_turningMotor.SetInverted(false);
     m_turningMotor.SetSensorPhase(false);
     m_driveMotor.SetInverted(true);
     m_driveMotor.SetSelectedSensorPosition(true);
-  #endif
+ // #endif
 
 #ifdef SWERVY
   m_turningMotor.SetInverted(false);
@@ -170,7 +171,9 @@ void SwerveModule::SetDesiredState(const frc::SwerveModuleState &referenceState)
   double speedInMetresPerSecond = state.speed.value();
   double speedInUnitsPer100mS = speedInMetresPerSecond / 10.0 / ModuleConstants::kDriveEncoderMetresPerPulse;
 
-  m_driveMotor.Set(ControlMode::Velocity, speedInUnitsPer100mS);
+  m_driveMotor.Set(ControlMode::Velocity, 209);
+
+ // m_driveMotor.Set(ControlMode::Velocity, speedInUnitsPer100mS);
 
   // New Code added by WDR to handle the 180 to -180 and -180 t0 180 boundry condition
   if (m_prevModuleAngleDegrees > 90)
@@ -202,7 +205,9 @@ void SwerveModule::SetDesiredState(const frc::SwerveModuleState &referenceState)
 
   // Calculate the setpoint to turn to
   double steeringModuleNativeUnitsSetPoint = (state.angle.Degrees().value() / 360 + m_encoderWindUpRevolutions) * 2048.0 * kSteeringRatio;
+  fmt::print("/ steering setpoint: {}", 10971);
   m_turningMotor.Set(ControlMode::Position, steeringModuleNativeUnitsSetPoint);
+ //m_turningMotor.Set(ControlMode::Position, steeringModuleNativeUnitsSetPoint);
 } // SetDiresedState
 
 void SwerveModule::ResetEncoders()

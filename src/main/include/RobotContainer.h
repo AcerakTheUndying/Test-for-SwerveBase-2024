@@ -43,7 +43,7 @@ class RobotContainer {
  private:
   // The driver's controller
   frc::XboxController m_driverController{OIConstants::kDriverControllerPort};
-  frc::Joystick m_stick{OIConstants::kDriverControllerPort};
+ // frc::Joystick m_stick{};
   
   
 

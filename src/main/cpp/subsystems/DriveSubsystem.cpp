@@ -43,8 +43,8 @@ DriveSubsystem::DriveSubsystem()
                   "Rear Right "},
       m_odometry{kDriveKinematics,
                  GetPigeonRotation2D(),
-                 {m_frontLeft.GetPosition(), m_frontRight.GetPosition(),
-                  m_rearLeft.GetPosition(), m_rearRight.GetPosition()},
+                 {m_frontLeft.GetPosition(), m_rearLeft.GetPosition(),
+                 m_frontRight.GetPosition(), m_rearRight.GetPosition()},
                  frc::Pose2d{}} {}
 
 void DriveSubsystem::Periodic() {
@@ -67,11 +67,11 @@ void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
 
   kDriveKinematics.DesaturateWheelSpeeds(&states, AutoConstants::kMaxSpeed);
 
-  auto [fl, fr, bl, br] = states;
+  auto [fl, bl, fr, br] = states;
 
   m_frontLeft.SetDesiredState(fl);
-  m_frontRight.SetDesiredState(fr);
   m_rearLeft.SetDesiredState(bl);
+  m_frontRight.SetDesiredState(fr);
   m_rearRight.SetDesiredState(br);
 }
 
@@ -79,10 +79,17 @@ void DriveSubsystem::SetModuleStates(
     wpi::array<frc::SwerveModuleState, 4> desiredStates) {
   kDriveKinematics.DesaturateWheelSpeeds(&desiredStates,
                                          AutoConstants::kMaxSpeed);
+  frc::SwerveModuleState tempState(0.5_mps, frc::Rotation2d(45_deg));
+/*  m_frontLeft.SetDesiredState(tempState);
+  m_rearLeft.SetDesiredState(tempState);
+  m_frontRight.SetDesiredState(tempState);
+  m_rearRight.SetDesiredState(tempState);*/
+
   m_frontLeft.SetDesiredState(desiredStates[0]);
-  m_frontRight.SetDesiredState(desiredStates[1]);
-  m_rearLeft.SetDesiredState(desiredStates[2]);
+  m_rearLeft.SetDesiredState(desiredStates[1]);
+  m_frontRight.SetDesiredState(desiredStates[2]);
   m_rearRight.SetDesiredState(desiredStates[3]);
+  
 }
 
 void DriveSubsystem::ResetEncoders() {
@@ -114,8 +121,8 @@ frc::Pose2d DriveSubsystem::GetPose() {
 void DriveSubsystem::ResetOdometry(frc::Pose2d pose) {
   m_odometry.ResetPosition(
       GetHeading(),
-      {m_frontLeft.GetPosition(), m_frontRight.GetPosition(),
-       m_rearLeft.GetPosition(), m_rearRight.GetPosition()},
+      {m_frontLeft.GetPosition(), m_rearLeft.GetPosition(),
+      m_frontRight.GetPosition(), m_rearRight.GetPosition()},
       pose);
 }
 
