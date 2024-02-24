@@ -3,7 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include <numbers>
-
+#include "TargetRobot.h"
 #include <frc/TimedRobot.h>
 #include <frc/geometry/Translation2d.h>
 #include <frc/kinematics/SwerveDriveKinematics.h>
@@ -28,7 +28,7 @@
  * they are needed.
  */
 
-//Global Constants
+// Global Constants
 
 constexpr int kTimeoutMs = 10;
 constexpr int kPIDLoopIdx = 0;
@@ -36,25 +36,25 @@ constexpr int kPIDLoopIdx = 0;
 namespace DriveConstants {
 constexpr int kPigeonID = 5;
 
-  //Drive Motor ID's
-    constexpr int kFrontLeftDriveMotorID = 22;
-    constexpr int kRearLeftDriveMotorID = 42;
-    constexpr int kFrontRightDriveMotorID = 12;
-    constexpr int kRearRightDriveMotorID = 32;
+// Drive Motor ID's
+constexpr int kFrontLeftDriveMotorID = 22;
+constexpr int kRearLeftDriveMotorID = 42;
+constexpr int kFrontRightDriveMotorID = 12;
+constexpr int kRearRightDriveMotorID = 32;
 
-  //Turning Motor ID's
-    constexpr int kFrontLeftTurningMotorID = 21;
-    constexpr int kRearLeftTurningMotorID = 41;
-    constexpr int kFrontRightTurningMotorID = 11;
-    constexpr int kRearRightTurningMotorID = 31;
+// Turning Motor ID's
+constexpr int kFrontLeftTurningMotorID = 21;
+constexpr int kRearLeftTurningMotorID = 41;
+constexpr int kFrontRightTurningMotorID = 11;
+constexpr int kRearRightTurningMotorID = 31;
 
-  //CANCoder ID's 
-    constexpr int kFrontLeftAbsoluteTurningEncoderID = 20;
-    constexpr int kRearLeftAbsoluteTurningEncoderID = 40;
-    constexpr int kFrontRightAbsoluteTurningEncoderID = 10;
-    constexpr int kRearRightAbsoluteTurningEncoderID = 30;
-    constexpr double kTurning_kP = 0.22;
-    constexpr double kDrive_kP = 0.1;
+// CANCoder ID's
+constexpr int kFrontLeftAbsoluteTurningEncoderID = 20;
+constexpr int kRearLeftAbsoluteTurningEncoderID = 40;
+constexpr int kFrontRightAbsoluteTurningEncoderID = 10;
+constexpr int kRearRightAbsoluteTurningEncoderID = 30;
+constexpr double kTurning_kP = 0.22;
+constexpr double kDrive_kP = 0.1;
 
 // If you call DriveSubsystem::Drive with a different period make sure to update
 // this.
@@ -74,10 +74,15 @@ inline constexpr double kPRearLeftVel = 0.5;
 inline constexpr double kPFrontRightVel = 0.5;
 inline constexpr double kPRearRightVel = 0.5;
 
-constexpr double kFrontleftAngleOffset = -124.717; //104.854;    //-178.505859;    //-295.4, Generic offset is -43.505859
-constexpr double kFrontRightAngleOffset = -81.65;    //-131.2, Generic offset is 58.535
-constexpr double kRearleftAngleOffset = 145.986;    //-62.2, Generic offset is 10.986
-constexpr double kRearRightAngleOffset = -34.98047;    //-224.4, Generic offset 145.01953
+constexpr double kFrontleftAngleOffset =
+    -124.717;  // 104.854;    //-178.505859;    //-295.4, Generic offset is
+               // -43.505859
+constexpr double kFrontRightAngleOffset =
+    -81.65;  //-131.2, Generic offset is 58.535
+constexpr double kRearleftAngleOffset =
+    145.986;  //-62.2, Generic offset is 10.986
+constexpr double kRearRightAngleOffset =
+    -34.98047;  //-224.4, Generic offset 145.01953
 constexpr double kSteeringRatio = (60.0 / 10.0) * (50.0 / 14.0);
 
 constexpr auto kMaxDrivingRotation = units::radians_per_second_t(2.5);
@@ -85,17 +90,33 @@ constexpr auto kMaxDrivingRotation = units::radians_per_second_t(2.5);
 }  // namespace DriveConstants
 
 namespace ModuleConstants {
-constexpr double kDriveGearRatio = (50.0 / 14.0) * (17 / 27.0) * (45.0 / 15.0); //L2 Drive gear ratio
+constexpr double kDriveGearRatio =
+    (50.0 / 14.0) * (17 / 27.0) * (45.0 / 15.0);  // L2 Drive gear ratio
 
-inline constexpr int kEncoderCPR = 1024;
-inline constexpr double kWheelDiameterMeters = 0.15;
-    constexpr double kDriveEncoderMetresPerPulse =
-        // using encoder inside Falcon so need to divide circumference by gear ratio and by CPR
-        (kWheelDiameterMeters * std::numbers::pi) / static_cast<double>(kEncoderCPR) / kDriveGearRatio;
+inline constexpr int kEncoderCPR = 2048;
+inline constexpr double kWheelDiameterMeters = 0.10033;
 
-inline constexpr double kTurningEncoderRadiansPerPulse =
+// 2024 Robot
+#ifdef ROBOT2024
+constexpr double kTurnGearRatio =
+    (50.0 / 14.0) * (60.0 / 10.0);  // L2 Turn gear ratio
+#endif
+
+// spo_robot
+#ifdef SPOBOT
+constexpr double kTurnGearRatio =
+    (32.0 / 15.0) * (60.0 / 10.0);  // L2 Turn gear ratio
+#endif
+
+constexpr double kDriveEncoderMetresPerPulse =
+    // using encoder inside Falcon so need to divide circumference by gear ratio
+    // and by CPR
+    (kWheelDiameterMeters * std::numbers::pi) /
+    static_cast<double>(kEncoderCPR) / kDriveGearRatio;
+
+constexpr double kTurningEncoderRadiansPerPulse =
     // Assumes the encoders are directly mounted on the wheel shafts
-    (std::numbers::pi * 2) / static_cast<double>(kEncoderCPR);
+    (std::numbers::pi * 2) / static_cast<double>(kEncoderCPR) / kTurnGearRatio;
 
 inline constexpr double kPModuleTurningController = 1;
 inline constexpr double kPModuleDriveController = 1;
@@ -111,20 +132,23 @@ inline constexpr double kPXController = 0.5;
 inline constexpr double kPYController = 0.5;
 inline constexpr double kPThetaController = 0.5;
 
-//
-
 extern const frc::TrapezoidProfile<units::radians>::Constraints
     kThetaControllerConstraints;
-
 }  // namespace AutoConstants
+
+namespace TeleopConstants {
+inline constexpr auto kMaxSpeedInTeleop = 5_mps;
+inline constexpr auto kMaxAccelerationInTeleop = 5_mps_sq;
+inline constexpr auto kMaxAngularSpeedInTel3op = 3.142_rad_per_s;
+inline constexpr auto kMaxAngularAccelerationInTeleop = 3.142_rad_per_s_sq;
+}  // namespace TeleopConstants
 
 namespace OIConstants {
 inline constexpr int kDriverControllerPort = 0;
 }  // namespace OIConstants
 
-
-namespace ShooterConstants{
-  const int shooterMotorID = 3; 
-  const int feedMotorID = 4; 
-  const int elevatorMotorID = 5;
-}
+namespace ShooterConstants {
+const int shooterMotorID = 3;
+const int feedMotorID = 4;
+const int elevatorMotorID = 5;
+}  // namespace ShooterConstants

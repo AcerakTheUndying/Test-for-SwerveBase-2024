@@ -4,6 +4,9 @@
 
 #pragma once
 
+#include <wpi/deprecated.h>
+WPI_IGNORE_DEPRECATED
+
 #include <frc/Encoder.h>
 #include <frc/drive/MecanumDrive.h>
 #include <frc/geometry/Pose2d.h>
@@ -134,3 +137,5 @@ class DriveSubsystem : public frc2::SubsystemBase {
       frc::Rotation2d GetPigeonRotation2D();
 
 };
+#include <wpi/deprecated.h>
+WPI_UNIGNORE_DEPRECATED

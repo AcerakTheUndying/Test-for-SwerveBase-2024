@@ -3,12 +3,23 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #pragma once
-
+#include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
 
 class IntakeSubsystem : public frc2::SubsystemBase {
  public:
   IntakeSubsystem();
+    
+  void RotateToForward();
+  void RotateToBackwards();
+  void RotateToLeft();
+  void RotateToRight();
+
+  frc2::CommandPtr IntakeFromFront();
+  frc2::CommandPtr IntakeFromBack();
+  frc2::CommandPtr IntakeFromLeft();
+  frc2::CommandPtr IntakeFromRight();
+  frc2::CommandPtr HandoverToShooter();
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.

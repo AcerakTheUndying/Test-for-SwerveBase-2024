@@ -11,6 +11,8 @@ class ShooterSubsystem : public frc2::SubsystemBase {
  public:
   ShooterSubsystem();
 
+
+
   /**
    * Will be called periodically whenever the CommandScheduler runs.
    */

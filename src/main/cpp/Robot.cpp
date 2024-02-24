@@ -7,7 +7,9 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/CommandScheduler.h>
 
-void Robot::RobotInit() {}
+void Robot::RobotInit() {
+  fmt::print(" Robot Init just ran.\n");
+}
 
 /**
  * This function is called every 20 ms, no matter the mode. Use
@@ -53,6 +55,7 @@ void Robot::TeleopInit() {
     m_autonomousCommand->Cancel();
     m_autonomousCommand.reset();
   }
+  fmt::print("----------Teleop just started--------------\n");
 }
 
 /**

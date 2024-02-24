@@ -4,7 +4,10 @@
 
 #pragma once
 
-#include <frc/XboxController.h>
+#include <wpi/deprecated.h>
+WPI_IGNORE_DEPRECATED
+
+//#include <frc/XboxController.h>
 #include <frc/Joystick.h>
 
 #include <frc/controller/PIDController.h>
@@ -42,8 +45,8 @@ class RobotContainer {
 
  private:
   // The driver's controller
-  frc::XboxController m_driverController{OIConstants::kDriverControllerPort};
- // frc::Joystick m_stick{};
+  //frc::XboxController m_driverController{OIConstants::kDriverControllerPort};
+ frc::Joystick m_stick{OIConstants::kDriverControllerPort};
   
   
 
@@ -54,3 +57,4 @@ class RobotContainer {
 
   void ConfigureButtonBindings();
 };
+WPI_UNIGNORE_DEPRECATED

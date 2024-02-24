@@ -12,6 +12,9 @@
 #include "Constants.h"
 
 using namespace DriveConstants;
+#include <wpi/deprecated.h>
+
+WPI_IGNORE_DEPRECATED
 
 DriveSubsystem::DriveSubsystem()
     : m_frontLeft{kFrontLeftDriveMotorID,
@@ -131,3 +134,4 @@ frc::Rotation2d DriveSubsystem::GetPigeonRotation2D() {
   // So we had to make a method that got the degree and returned as a Rotation2D
   return frc::Rotation2d(GetHeading());
 }
+WPI_UNIGNORE_DEPRECATED

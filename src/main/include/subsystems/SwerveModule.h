@@ -5,6 +5,8 @@
 #pragma once
 
 #include <numbers>
+#include <wpi/deprecated.h>
+WPI_IGNORE_DEPRECATED
 
 #include "ctre/Phoenix.h" // Needed for Falcons and Pigeon
 #include <frc/controller/PIDController.h>
@@ -68,3 +70,5 @@ private:
     double m_prevModuleAngleDegrees;
 
 };
+
+WPI_UNIGNORE_DEPRECATED
