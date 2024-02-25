@@ -5,11 +5,13 @@
 #pragma once
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
+#include <ctre/phoenix6/TalonFX.hpp>
+#include "Constants.h"
 
 class IntakeSubsystem : public frc2::SubsystemBase {
  public:
   IntakeSubsystem();
-    
+   
   void RotateToForward();
   void RotateToBackwards();
   void RotateToLeft();
@@ -27,6 +29,15 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   void Periodic() override;
 
  private:
+  bool ProximitySensorOnForwardLimitConnector();
+  bool ProximitySensorOnReverseLimitConnector();
+  void IntakeInwards(double IntakePower);
+  void IntakeStop();
+  void IntakeForwardUntilRollersClear();
+  void EjectNoteToShooter();
+
+ ctre::phoenix6::hardware::TalonFX m_intakeMotor{IntakeConstants::kIntakeMotorCANID,RIO_CANBUS_NAME};
+
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
 };

@@ -22,6 +22,7 @@ WPI_IGNORE_DEPRECATED
 
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
+#include "subsystems/IntakeSubsystem.h"
 
 #include "commands/DefaultDrive.h"
 
@@ -54,6 +55,7 @@ class RobotContainer {
 
   // The robot's subsystems
   DriveSubsystem m_drive;
+  IntakeSubsystem m_intakeSubsystem;
 
   void ConfigureButtonBindings();
 };

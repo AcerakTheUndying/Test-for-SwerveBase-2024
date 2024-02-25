@@ -106,7 +106,7 @@ SwerveModule::SwerveModule(
 
   m_turningMotor.ConfigVoltageCompSaturation(11.0);
 
-  /* set the peak and nominal outputs */
+  // set the peak and nominal outputs 
   m_turningMotor.ConfigNominalOutputForward(0, kTimeoutMs);
   m_turningMotor.ConfigNominalOutputReverse(0, kTimeoutMs);
   //  m_turningMotor.ConfigPeakOutputForward(1.0, kTimeoutMs);
@@ -114,7 +114,7 @@ SwerveModule::SwerveModule(
   m_turningMotor.ConfigPeakOutputForward(0.3, kTimeoutMs);
   m_turningMotor.ConfigPeakOutputReverse(-0.3, kTimeoutMs);
 
-  /* set closed loop gains in slot0 */
+  // set closed loop gains in slot0 
   m_turningMotor.Config_kF(
       //kPIDLoopIdx, 0.1097, kTimeoutMs);  // WARNING this did have a kF of 0.1097,
       kPIDLoopIdx, 0.0, kTimeoutMs);  // was set to 0 as position mode
@@ -180,24 +180,7 @@ void SwerveModule::SetDesiredState(
   // Optimize the reference state to avoid spinning further than 90 degrees
   auto state = frc::SwerveModuleState::Optimize(
       referenceState, frc::Rotation2d(GetSwerveTurningFalconInternalRadians()));
-  /*
-    const auto state = (referenceState.speed.value() > 0.04) ?
-        frc::SwerveModuleState::Optimize(referenceState,
-    frc::Rotation2d(GetSwerveTurningFalconInternalRadians()))
-        :
-        referenceState;
-  */
-  /*
-  frc::SwerveModuleState state;
-  if (referenceState.speed.value() > 0.09) {
-    state=frc::SwerveModuleState::Optimize(referenceState,
-  frc::Rotation2d(GetSwerveTurningFalconInternalRadians()));
-    //fmt::print("OPTIMIZED angle {} speed
-  {}\n",state.angle.Degrees().value(),state.speed.value()); } else {
-    state=referenceState;
-    //fmt::print("NONOPTIMIZED angle {} speed
-  {}\n",state.angle.Degrees().value(),state.speed.value());
-  }*/
+ 
 
   // Need velocity in units per 100ms,
   double speedInMetresPerSecond = state.speed.value();
@@ -279,4 +262,6 @@ void SwerveModule::SetParkMode() {
 void SwerveModule::ReleaseParkMode() {
   m_driveMotor.SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Coast);
 }
+
+
 WPI_UNIGNORE_DEPRECATED
