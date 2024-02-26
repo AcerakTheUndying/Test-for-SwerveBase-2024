@@ -4,17 +4,19 @@
 
 #include "subsystems/IntakeSubsystem.h"
 #include <ctre/phoenix6/StatusSignal.hpp>
+#include <frc2/command/FunctionalCommand.h>
+
 
 IntakeSubsystem::IntakeSubsystem() = default;
 
 // This method will be called once per scheduler run
 void IntakeSubsystem::Periodic() {
-  if (ProximitySensorOnForwardLimitConnector()){
-    fmt::println("Forward Limit {}",m_intakeMotor.GetForwardLimit().ToString());
-  }
-  if (ProximitySensorOnReverseLimitConnector()){
-    fmt::println("Reverse Limit {}",m_intakeMotor.GetReverseLimit().ToString());
-  }
+ // if (ProximitySensorOnForwardLimitConnector()){
+ //   fmt::println("Forward Limit {}",m_intakeMotor.GetForwardLimit().ToString());
+ // }
+ // if (ProximitySensorOnReverseLimitConnector()){
+ //   fmt::println("Reverse Limit {}",m_intakeMotor.GetReverseLimit().ToString());
+ // }
 }
 
 void IntakeSubsystem::RotateToForward(){
@@ -39,6 +41,8 @@ void IntakeSubsystem::IntakeInwards(double IntakePower){
 
 void IntakeSubsystem::IntakeStop(){
   m_intakeMotor.Set(0.0);
+  fmt::println("Motor Rotor Position {}",m_intakeMotor.GetRotorPosition().GetValueAsDouble());
+  
 }
 
 void IntakeSubsystem::IntakeForwardUntilRollersClear(){
@@ -56,7 +60,30 @@ bool IntakeSubsystem::ProximitySensorOnReverseLimitConnector(){
   //if (LimitObject.GetValue()==ctre::phoenix6::signals::ForwardLimitValue::ClosedToGround);
   return (m_intakeMotor.GetReverseLimit().GetValue()==ctre::phoenix6::signals::ReverseLimitValue::ClosedToGround);
 }
+frc2::CommandPtr IntakeSubsystem::ExampleFullCommand(){
+  return frc2::FunctionalCommand(
+  // Reset encoders on command start //This is Command Init
+  [this] { //m_drive.ResetEncoders(); 
+          IntakeInwards(0.1);
+  },
+  // Start driving forward at the start of the command  //This is the Command PeriodicFunction
+  [this] { //m_drive.ArcadeDrive(ac::kAutoDriveSpeed, 0); 
+  },
+  // Stop driving at the end of the command  //This is the Command End Function
+  [this] (bool interrupted) { 
+    //m_drive.ArcadeDrive(0, 0); 
+        IntakeStop();
+  },
+  // End the command when the robot's driven distance exceeds the desired value  //This is the Command IsFinished
+  [this] { 
+    //return m_drive.GetAverageEncoderDistance() >= kAutoDriveDistanceInches; 
+    return ProximitySensorOnForwardLimitConnector();
+    //return false;
+    }
+  // Requires the subsystem
 
+).ToPtr();
+}
 
 frc2::CommandPtr IntakeSubsystem::IntakeFromFront(){
     return this->RunOnce(

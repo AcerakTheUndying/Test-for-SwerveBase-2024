@@ -17,11 +17,19 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   void RotateToLeft();
   void RotateToRight();
 
+  void IntakeInwards(double IntakePower);
+  void IntakeStop();
+
   frc2::CommandPtr IntakeFromFront();
   frc2::CommandPtr IntakeFromBack();
   frc2::CommandPtr IntakeFromLeft();
   frc2::CommandPtr IntakeFromRight();
   frc2::CommandPtr HandoverToShooter();
+
+  bool ProximitySensorOnForwardLimitConnector();
+  bool ProximitySensorOnReverseLimitConnector();
+
+  frc2::CommandPtr ExampleFullCommand();  //Example to show how a full command can be created inline
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.
@@ -29,10 +37,8 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   void Periodic() override;
 
  private:
-  bool ProximitySensorOnForwardLimitConnector();
-  bool ProximitySensorOnReverseLimitConnector();
-  void IntakeInwards(double IntakePower);
-  void IntakeStop();
+
+
   void IntakeForwardUntilRollersClear();
   void EjectNoteToShooter();
 
