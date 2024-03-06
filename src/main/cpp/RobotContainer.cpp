@@ -21,6 +21,10 @@
 
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
+#include "subsystems/IntakeSubsystem.h"
+
+#include <frc/smartdashboard/SmartDashboard.h>
+
 
 using namespace DriveConstants;
 
@@ -62,7 +66,13 @@ RobotContainer::RobotContainer() {
       [this] { return (ApplyDeadband(-m_stick.GetZ(),0.1));}
   ));
 
+
+frc::SmartDashboard::PutData("Intake Command", &m_loadIntakeCMD);
+
+
 }
+
+
 
 void RobotContainer::ConfigureButtonBindings() {}
 

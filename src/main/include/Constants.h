@@ -30,31 +30,37 @@
 
 // Global Constants
 
+static constexpr char const *RIO_CANBUS_NAME{"rio"};
+static constexpr char const *CARNIVORE_CANBUS_NAME{"Canivore1"};
+
 constexpr int kTimeoutMs = 10;
 constexpr int kPIDLoopIdx = 0;
 
 namespace DriveConstants {
 constexpr int kPigeonID = 5;
 
-// Drive Motor ID's
+// Drive Motor ID's end in 2
 constexpr int kFrontLeftDriveMotorID = 22;
 constexpr int kRearLeftDriveMotorID = 42;
 constexpr int kFrontRightDriveMotorID = 12;
 constexpr int kRearRightDriveMotorID = 32;
 
-// Turning Motor ID's
+// Turning Motor ID's end in 1
 constexpr int kFrontLeftTurningMotorID = 21;
 constexpr int kRearLeftTurningMotorID = 41;
 constexpr int kFrontRightTurningMotorID = 11;
 constexpr int kRearRightTurningMotorID = 31;
 
-// CANCoder ID's
+// CANCoder ID's end in 0
 constexpr int kFrontLeftAbsoluteTurningEncoderID = 20;
 constexpr int kRearLeftAbsoluteTurningEncoderID = 40;
 constexpr int kFrontRightAbsoluteTurningEncoderID = 10;
 constexpr int kRearRightAbsoluteTurningEncoderID = 30;
 constexpr double kTurning_kP = 0.22;
 constexpr double kDrive_kP = 0.1;
+
+
+
 
 // If you call DriveSubsystem::Drive with a different period make sure to update
 // this.
@@ -88,6 +94,18 @@ constexpr double kSteeringRatio = (60.0 / 10.0) * (50.0 / 14.0);
 constexpr auto kMaxDrivingRotation = units::radians_per_second_t(2.5);
 
 }  // namespace DriveConstants
+
+namespace IntakeConstants {
+// Intake Motor
+constexpr int kIntakeMotorCANID = 50; 
+
+}  // namespace IntakeConstants 
+
+namespace ClimbConstants {
+// Climb Motors
+constexpr int kLeftClimberMotorCANID = 61;
+constexpr int kRightClimberMotorCANID = 62;
+}  // namespace ClimbConstants
 
 namespace ModuleConstants {
 constexpr double kDriveGearRatio =
