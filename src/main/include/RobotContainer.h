@@ -24,10 +24,7 @@ WPI_IGNORE_DEPRECATED
 
 // Subsystems
 #include "subsystems/DriveSubsystem.h"
-#include "subsystems/IntakeSubsystem.h"
-
 //Commands
-#include "commands/LoadIntake.h"
 #include "commands/DefaultDrive.h"
 
 /**
@@ -59,10 +56,6 @@ class RobotContainer {
 
   // The robot's subsystems
   DriveSubsystem m_drive;
-  IntakeSubsystem m_intakeSubsystem;
-
-  // The Robot's Commands
-  LoadIntake m_loadIntakeCMD{&m_intakeSubsystem};
 
   void ConfigureButtonBindings();
 };

@@ -21,7 +21,6 @@
 
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
-#include "subsystems/IntakeSubsystem.h"
 
 #include <frc/smartdashboard/SmartDashboard.h>
 
@@ -65,9 +64,6 @@ RobotContainer::RobotContainer() {
       [this] { return (ApplyDeadbandSquaredInputs(-m_stick.GetX(),0.1)*((1 - m_stick.GetThrottle()) / 2) * 5.0);},
       [this] { return (ApplyDeadband(-m_stick.GetZ(),0.1));}
   ));
-
-
-frc::SmartDashboard::PutData("Intake Command", &m_loadIntakeCMD);
 
 
 }
