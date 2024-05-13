@@ -9,6 +9,7 @@
 #include <commands/DefaultDrive.h>
 #include <units/angle.h>
 #include <units/velocity.h>
+#include <frc/DriverStation.h>
 
 DefaultDrive::DefaultDrive(DriveSubsystem *subsystem, std::function<double()> fwd_back,
                            std::function<double()> left_right, std::function<double()> rotation)
@@ -28,8 +29,12 @@ void DefaultDrive::Initialize() {}
 // Called repeatedly when this Command is scheduled to run
 void DefaultDrive::Execute()
 {
-  m_DriveSubsystem->Drive(units::meters_per_second_t(m_fwd_back()),
-                          units::meters_per_second_t(m_left_right()),
+int invert = 1;
+if (frc::DriverStation::GetAlliance() == frc::DriverStation::Alliance::kRed) {
+    invert = -1;
+}
+  m_DriveSubsystem->Drive(units::meters_per_second_t(m_fwd_back()*invert),
+                          units::meters_per_second_t(m_left_right()*invert),
                           units::radians_per_second_t(m_rotation()),
                           true);
 }

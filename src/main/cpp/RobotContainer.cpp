@@ -21,7 +21,6 @@
 
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
-#include "subsystems/IntakeSubsystem.h"
 
 #include <frc/smartdashboard/SmartDashboard.h>
 
@@ -67,7 +66,6 @@ RobotContainer::RobotContainer() {
   ));
 
 
-frc::SmartDashboard::PutData("Intake Command", &m_loadIntakeCMD);
 
 
 }

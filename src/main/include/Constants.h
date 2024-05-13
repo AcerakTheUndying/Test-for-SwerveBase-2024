@@ -164,9 +164,3 @@ inline constexpr auto kMaxAngularAccelerationInTeleop = 3.142_rad_per_s_sq;
 namespace OIConstants {
 inline constexpr int kDriverControllerPort = 0;
 }  // namespace OIConstants
-
-namespace ShooterConstants {
-const int shooterMotorID = 3;
-const int feedMotorID = 4;
-const int elevatorMotorID = 5;
-}  // namespace ShooterConstants

@@ -1,41 +1,38 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
+#include <wpi/deprecated.h>
+WPI_IGNORE_DEPRECATED
 
 #include "subsystems/SwerveModule.h"
 
 #include <frc/geometry/Rotation2d.h>
 #include "Constants.h"
-#include <wpi/deprecated.h>
+
 using namespace DriveConstants;
-WPI_IGNORE_DEPRECATED
+
 SwerveModule::SwerveModule(
-    int driveMotorCANBusID, int turningMotorCANBusID, int AbsoluteTurnEncoderID,
-    double offsetDegrees, double brakeAngle,
+    int driveMotorCANBusID, 
+    int turningMotorCANBusID, 
+    int AbsoluteTurnEncoderID,
+    double offsetDegrees, 
+    double brakeAngle,
     std::string moduleName)  // WDR: Used by Smartdashboard puts.
     : m_driveMotor(driveMotorCANBusID),
       m_turningMotor(turningMotorCANBusID),
       m_absoluteTurnEncoder(AbsoluteTurnEncoderID) {
+  // SwerveModule Constructor Code Starts here
   // Setup the CANCoder on the Swerve Module for absolute steering reading.
-  m_absoluteTurnEncoder.ConfigSensorInitializationStrategy(
-      ctre::phoenix::sensors::SensorInitializationStrategy::
-          BootToAbsolutePosition,
-      kTimeoutMs);
-  m_absoluteTurnEncoder.ConfigAbsoluteSensorRange(
-      ctre::phoenix::sensors::AbsoluteSensorRange::Signed_PlusMinus180,
-      kTimeoutMs);
+  m_absoluteTurnEncoder.ConfigSensorInitializationStrategy(ctre::phoenix::sensors::SensorInitializationStrategy::BootToAbsolutePosition,kTimeoutMs);
+  m_absoluteTurnEncoder.ConfigAbsoluteSensorRange(ctre::phoenix::sensors::AbsoluteSensorRange::Signed_PlusMinus180,kTimeoutMs);
   // m_absoluteTurnEncoder.ConfigMagnetOffset(offsetDegrees, kTimeoutMs);
-  m_absoluteTurnEncoder.SetStatusFramePeriod(
-      ctre::phoenix::sensors::CANCoderStatusFrame_VbatAndFaults, 255,
-      kTimeoutMs);
-  m_absoluteTurnEncoder.SetStatusFramePeriod(
-      ctre::phoenix::sensors::CANCoderStatusFrame_SensorData, 255, kTimeoutMs);
+  m_absoluteTurnEncoder.SetStatusFramePeriod(ctre::phoenix::sensors::CANCoderStatusFrame_VbatAndFaults, 255,kTimeoutMs);
+  m_absoluteTurnEncoder.SetStatusFramePeriod(ctre::phoenix::sensors::CANCoderStatusFrame_SensorData, 255, kTimeoutMs);
 
   // Need to initialize the Steering Motor encoder to match the absolute Angle
   // of the module First get the absolute Angle of the module in degrees from
   // the CANcoder
-  double powerOnAbsoluteSteerAngle =
-      m_absoluteTurnEncoder.GetAbsolutePosition();
+  double powerOnAbsoluteSteerAngle =m_absoluteTurnEncoder.GetAbsolutePosition();
 
 // Then Scales this up to match units of the integrated Sensor on the Steering
 // Motor
@@ -45,8 +42,7 @@ SwerveModule::SwerveModule(
 #endif
 
 #ifdef ROBOT2024
-  m_turningMotor.SetSelectedSensorPosition(powerOnAbsoluteSteerAngle / 360.0 *
-                                           kSteeringRatio * 2048.0);
+  m_turningMotor.SetSelectedSensorPosition(powerOnAbsoluteSteerAngle / 360.0 * kSteeringRatio * 2048.0);
 #endif
 
 #ifdef SPOBOT
@@ -252,12 +248,12 @@ units::radian_t SwerveModule::GetSwerveTurningFalconInternalRadians() {
                  ModuleConstants::kTurningEncoderRadiansPerPulse),
                 360.0));
 }
-
+/*
 void SwerveModule::SetParkMode() {
   m_driveMotor.SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
   SetDesiredState(frc::SwerveModuleState{
       0_mps, frc::Rotation2d(units::angle::degree_t(m_brakeAngle))});
-}
+}*/
 
 void SwerveModule::ReleaseParkMode() {
   m_driveMotor.SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Coast);
